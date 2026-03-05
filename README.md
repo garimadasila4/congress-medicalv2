@@ -50,13 +50,8 @@ The first push to `main` (or a manual run of the “Deploy to GitHub Pages” wo
 
 Later pushes to `main` will redeploy automatically.
 
-### Live site shows 404?
+### If the live site shows 404
 
-1. **Set source to GitHub Actions**  
-   Repo → **Settings → Pages**. Under **Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”). Save.
-
-2. **Run the workflow**  
-   Repo → **Actions** → open **Deploy to GitHub Pages** → **Run workflow** → **Run workflow**. Wait until the run completes (green check).
-
-3. **Wait a minute**  
-   After the workflow succeeds, the site can take up to a minute to appear at **https://YOUR_USERNAME.github.io/REPO_NAME/**.
+1. **Check Pages source:** Repo **Settings → Pages**. Under **Build and deployment**, set **Source** to **GitHub Actions** (not "Deploy from a branch"). Save.
+2. **Check the workflow:** Repo **Actions** tab. Open the latest "Deploy to GitHub Pages" run. If it failed, fix the error. If it’s green, wait a minute and reload the site.
+3. **Use branch deploy instead:** In **Settings → Pages**, set **Source** to **Deploy from a branch**. **Branch:** `main`, **Folder:** `/ (root)`. Save. The site will be built from the repo root (no workflow needed). Live URL: **https://garimadasila4.github.io/congress-medicalv2/**
