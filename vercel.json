@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/congress-design-luxury", "destination": "/congress-design-luxury.html" }
+  ]
+}
