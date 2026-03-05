@@ -2,6 +2,11 @@
 
 Static app for congress abstracts and research intelligence (dark/light theme, responsive).
 
+## Design files
+
+- **Root:** `index.html`, `congress-design-luxury.html` — main site (oneLabel colors, no gradients).
+- **congress-medicalv2/:** Design variant with `congress-design-luxury.html`, `theme-colors.css`, and `index.html` (external theme file).
+
 ## Run locally
 
 ```bash
