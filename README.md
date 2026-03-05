@@ -49,3 +49,14 @@ The first push to `main` (or a manual run of the “Deploy to GitHub Pages” wo
 **https://YOUR_USERNAME.github.io/REPO_NAME/**
 
 Later pushes to `main` will redeploy automatically.
+
+### Live site shows 404?
+
+1. **Set source to GitHub Actions**  
+   Repo → **Settings → Pages**. Under **Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”). Save.
+
+2. **Run the workflow**  
+   Repo → **Actions** → open **Deploy to GitHub Pages** → **Run workflow** → **Run workflow**. Wait until the run completes (green check).
+
+3. **Wait a minute**  
+   After the workflow succeeds, the site can take up to a minute to appear at **https://YOUR_USERNAME.github.io/REPO_NAME/**.
