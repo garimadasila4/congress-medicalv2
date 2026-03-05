@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Congress Design — Research Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme-colors.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{font-size:16px;scroll-behavior:smooth;overflow-x:hidden;max-width:100%;
+  -webkit-text-size-adjust:100%;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-weight:300;min-height:100vh;display:flex;overflow-x:hidden;transition:var(--T);
+  max-width:100%;min-width:0}
+::selection{background:var(--gold-pale);color:var(--text)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}}
+
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 60% 50% at 15% 0%,var(--ambient1) 0%,transparent 60%),
+             radial-gradient(ellipse 40% 60% at 85% 80%,var(--ambient2) 0%,transparent 60%);
+  transition:var(--T)}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--surface);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;z-index:10;transition:var(--T)}
+
+.logo{padding:0 24px;height:77px;display:flex;flex-direction:column;
+  justify-content:center;border-bottom:1px solid var(--border);flex-shrink:0}
+
+.logo-wordmark{font-family:'Cormorant Garamond',serif;font-size:1.25rem;
+  font-weight:500;letter-spacing:.04em;color:var(--text);line-height:1.2;transition:color .35s}
+
+.logo-sub{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);margin-top:4px;transition:color .35s}
+
+.nav{padding:20px 10px 0;flex:1;overflow-y:auto}
+
+.nav-group-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted);padding:0 14px;margin:14px 0 5px;transition:color .35s}
+
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:8px;
+  cursor:pointer;font-size:.82rem;letter-spacing:.02em;color:var(--text-dim);
+  transition:all .2s;margin-bottom:1px;text-decoration:none;font-weight:400;
+  border:1px solid transparent}
+
+.nav-item:hover{background:var(--gold-pale);color:var(--text)}
+
+.nav-item.active{background:linear-gradient(135deg,rgba(59,113,243,.15),rgba(59,113,243,.05));
+  color:var(--gold);border-color:rgba(59,113,243,.22)}
+
+.nav-icon{width:15px;height:15px;flex-shrink:0;opacity:.7;transition:opacity .2s}
+.nav-item:hover .nav-icon,.nav-item.active .nav-icon{opacity:1}
+
+.nav-divider{height:1px;background:var(--border);margin:10px 10px}
+
+.sidebar-footer{padding:14px 12px;border-top:1px solid var(--border);flex-shrink:0}
+
+.sidebar-footer-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:8px;transition:color .35s}
+
+.user-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+  background:var(--surface2);border:1px solid var(--border);transition:var(--T)}
+
+.user-card{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+  background:var(--surface2);border:1px solid var(--border);transition:var(--T)}
+
+.user-avatar{width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#2563eb);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:500;color:#fff;flex-shrink:0;
+  font-family:'DM Sans',sans-serif}
+
+.user-info{flex:1;min-width:0}
+
+.user-name{font-size:.78rem;font-weight:500;color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .35s;
+  font-family:'DM Sans',sans-serif}
+
+.user-role{font-size:.62rem;color:var(--text-muted);transition:color .35s;
+  letter-spacing:.04em}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;position:relative;z-index:1;
+  min-width:0;max-width:100%;overflow-x:hidden}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:77px;border-bottom:1px solid var(--border);
+  background:var(--topbar-bg);backdrop-filter:blur(14px);
+  position:sticky;top:0;z-index:5;transition:var(--T);
+  min-width:0;max-width:100%}
+
+.topbar-search-wrap{display:block}
+.search-bar{display:flex;align-items:center;gap:10px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:8px;padding:9px 16px;
+  width:260px;transition:border-color .2s,background .35s}
+.search-bar:focus-within{border-color:rgba(59,113,243,.4)}
+.search-bar input{background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;
+  font-size:.82rem;font-weight:300;color:var(--text);width:100%;transition:color .35s}
+.search-bar input::placeholder{color:var(--text-muted)}
+
+.topbar-actions{display:flex;align-items:center;gap:12px}
+
+/* theme toggle */
+.theme-toggle{cursor:pointer;user-select:none;padding:6px}
+.toggle-track{width:42px;height:23px;border-radius:12px;background:var(--surface3);
+  border:1px solid var(--border);position:relative;transition:background .35s,border-color .35s}
+[data-theme="dark"] .toggle-track{background:rgba(59,113,243,.25);border-color:rgba(59,113,243,.35)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:15px;height:15px;border-radius:50%;
+  background:var(--text-muted);transition:transform .3s,background .3s}
+[data-theme="dark"] .toggle-thumb{transform:translateX(19px);background:var(--gold)}
+
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--text-dim);
+  padding:7px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;
+  font-size:.78rem;letter-spacing:.04em;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-ghost.btn-with-icon{display:inline-flex;align-items:center;gap:8px}
+.btn-ghost .btn-icon{flex-shrink:0;opacity:.9}
+.btn-ghost:hover .btn-icon{opacity:1}
+
+.btn-gold{background:linear-gradient(135deg,var(--gold),#2563eb);border:none;color:#fff;
+  padding:8px 20px;border-radius:7px;font-family:'DM Sans',sans-serif;
+  font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;box-shadow:0 4px 18px rgba(59,113,243,.22)}
+.btn-gold:hover{box-shadow:0 6px 26px rgba(59,113,243,.38);transform:translateY(-1px)}
+
+/* ── CONTENT ── */
+.content{padding:52px 48px;min-width:0;max-width:100%;overflow-x:hidden}
+.page-title,.card-title,.detail-title{word-wrap:break-word;overflow-wrap:break-word}
+
+.page-title{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;
+  letter-spacing:-.01em;line-height:1.1;color:var(--text);transition:color .35s}
+.page-title em{font-style:italic;font-weight:300;color:var(--gold-light);transition:color .35s}
+
+.page-subtitle{margin-top:8px;font-size:.78rem;color:var(--text-muted);
+  letter-spacing:.08em;text-transform:uppercase;transition:color .35s}
+
+.gold-rule{width:60px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0 0}
+
+.page-header{margin-bottom:48px;display:flex;justify-content:space-between;align-items:flex-end}
+
+.header-date{text-align:right;font-size:.72rem;color:var(--text-muted);
+  letter-spacing:.1em;text-transform:uppercase;transition:color .35s}
+.header-date strong{display:block;font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:300;color:var(--text-dim);
+  letter-spacing:.02em;margin-top:4px;transition:color .35s}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--border);border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;margin-bottom:52px;transition:var(--T)}
+
+.stat-card{background:var(--surface2);padding:30px 26px;position:relative;overflow:hidden;
+  transition:background .25s,var(--T)}
+.stat-card:hover{background:var(--surface3)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),transparent);opacity:0;transition:opacity .3s}
+.stat-card:hover::before{opacity:1}
+
+.stat-label{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:14px;transition:color .35s}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:3.2rem;font-weight:300;
+  line-height:1;color:var(--text);transition:color .35s}
+.stat-value.gold{color:var(--gold)}
+.stat-value.teal{color:var(--teal)}
+.stat-value.violet{color:var(--violet)}
+.stat-delta{margin-top:10px;font-size:.7rem;color:var(--text-muted);
+  display:flex;align-items:center;gap:6px;transition:color .35s}
+.stat-delta span{color:var(--teal);font-weight:500}
+
+/* ── SECTION ── */
+.section-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:26px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;
+  color:var(--text);letter-spacing:.01em;transition:color .35s}
+.view-all{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);cursor:pointer;text-decoration:none;transition:gap .2s,color .35s;
+  display:flex;align-items:center;gap:5px}
+.view-all:hover{gap:9px}
+
+/* ── ABSTRACT CARDS ── */
+.abstracts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+.abstract-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  padding:26px;cursor:pointer;transition:all .25s,var(--T);position:relative;overflow:hidden;
+  animation:fadeUp .5s ease both}
+.abstract-card:nth-child(1){animation-delay:.05s}
+.abstract-card:nth-child(2){animation-delay:.10s}
+.abstract-card:nth-child(3){animation-delay:.15s}
+.abstract-card:nth-child(4){animation-delay:.20s}
+.abstract-card:nth-child(5){animation-delay:.25s}
+.abstract-card:nth-child(6){animation-delay:.30s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.abstract-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);
+  border-color:rgba(59,113,243,.35)}
+
+.card-badge{display:inline-block;font-size:.6rem;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);background:var(--gold-pale);
+  border:1px solid rgba(59,113,243,.28);border-radius:4px;
+  padding:3px 8px;margin-bottom:14px;transition:var(--T)}
+
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;
+  line-height:1.45;color:var(--text);margin-bottom:16px;transition:color .35s}
+
+.card-meta{display:flex;flex-direction:column;gap:3px}
+.card-source{font-size:.72rem;color:var(--text-muted);letter-spacing:.04em;transition:color .35s}
+.card-date{font-size:.7rem;color:var(--text-muted);transition:color .35s}
+.card-arrow{position:absolute;bottom:18px;right:22px;font-size:1.1rem;color:var(--gold);
+  opacity:0;transition:opacity .2s,transform .2s;transform:translateX(-4px)}
+.abstract-card:hover .card-arrow{opacity:1;transform:translateX(0)}
+
+/* ── SOURCE BADGE ── */
+.source-badge{display:inline-flex;align-items:center;font-size:.6rem;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--gold);
+  background:var(--gold-pale);border:1px solid rgba(59,113,243,.28);
+  border-radius:4px;padding:2px 8px;transition:var(--T)}
+
+/* ── SOURCES TABLE ── */
+.sources-section{display:none}
+#page-sources[data-visible="true"],#page-search[data-visible="true"],#page-abstract-detail[data-visible="true"],#page-settings[data-visible="true"]{display:block !important}
+#page-sources.page-visible,#page-search.page-visible,#page-abstract-detail.page-visible,#page-settings.page-visible{display:block !important}
+
+.sources-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;flex-wrap:wrap;gap:16px}
+.sources-header-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
+
+.sources-table{width:100%;border-collapse:collapse;border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;transition:var(--T)}
+.sources-table thead{background:var(--surface2)}
+.sources-table thead th{padding:13px 26px;text-align:left;font-size:.6rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--text-muted);font-weight:400;
+  border-bottom:1px solid var(--border);transition:color .35s,border-color .35s}
+.sources-table tbody tr{background:var(--surface);border-bottom:1px solid var(--border);
+  transition:background .2s,var(--T);cursor:pointer}
+.sources-table tbody tr:last-child{border-bottom:none}
+.sources-table tbody tr:hover{background:var(--surface2)}
+.sources-table tbody td{padding:17px 26px;font-size:.84rem;color:var(--text-dim);transition:color .35s}
+.sources-table tbody td:first-child{font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:500;color:var(--text)}
+
+/* ── SEARCH PAGE ── */
+.search-page-section{display:none}
+.search-controls{display:flex;align-items:flex-end;gap:14px;margin-bottom:28px;flex-wrap:wrap}
+.search-control-group{display:flex;flex-direction:column;gap:5px}
+.search-control-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted);transition:color .35s}
+.search-input-wrap{display:flex;align-items:center;gap:10px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:8px;padding:10px 14px;width:300px;
+  transition:border-color .2s,background .35s}
+.search-input-wrap:focus-within{border-color:rgba(59,113,243,.45)}
+.search-input-wrap input{background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;
+  font-size:.82rem;font-weight:300;color:var(--text);width:100%;transition:color .35s}
+.search-input-wrap input::placeholder{color:var(--text-muted)}
+.search-select{appearance:none;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:10px 34px 10px 13px;font-family:'DM Sans',sans-serif;
+  font-size:.82rem;font-weight:300;color:var(--text);cursor:pointer;outline:none;
+  transition:border-color .2s,background .35s,color .35s;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%233B71F3' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center}
+.search-select:focus{border-color:rgba(59,113,243,.45)}
+
+.search-results-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;
+  max-width:100%;border:1px solid var(--border);border-radius:12px;overflow-y:visible}
+.search-results-table{width:100%;min-width:640px;border-collapse:collapse;transition:var(--T)}
+.search-results-table thead{background:var(--surface2)}
+.search-results-table thead th{position:sticky;top:0;z-index:2;background:var(--surface2);
+  padding:12px 18px;text-align:left;font-size:.58rem;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);font-weight:400;
+  border-bottom:1px solid var(--border);white-space:nowrap;transition:color .35s,border-color .35s;
+  box-shadow:0 1px 0 var(--border)}
+.search-results-table tbody tr{background:var(--surface);border-bottom:1px solid var(--border);
+  transition:background .2s,var(--T);cursor:pointer}
+.search-results-table tbody tr:last-child{border-bottom:none}
+.search-results-table tbody tr:hover{background:var(--surface2)}
+.search-results-table tbody td{padding:15px 18px;font-size:.8rem;color:var(--text-dim);
+  white-space:nowrap;transition:color .35s}
+.search-results-table tbody td.meeting-cell{white-space:normal;max-width:260px}
+.search-results-table .dash{color:var(--text-muted)}
+.view-details-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;
+  border-radius:6px;border:1px solid var(--border);background:none;color:var(--gold);
+  font-family:'DM Sans',sans-serif;font-size:.73rem;letter-spacing:.04em;cursor:pointer;
+  transition:all .2s;white-space:nowrap}
+.view-details-btn:hover{background:var(--gold-pale);border-color:var(--gold)}
+
+/* ── ABSTRACT DETAIL ── */
+.abstract-detail-section{display:none}
+.detail-back-btn{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);cursor:pointer;
+  background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:28px;
+  transition:color .2s}
+.detail-back-btn:hover{color:var(--gold)}
+.detail-card{background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;transition:var(--T)}
+.detail-title-bar{padding:24px 32px;border-bottom:1px solid var(--border)}
+.detail-title{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:500;
+  line-height:1.3;color:var(--text);transition:color .35s}
+.detail-body{padding:20px 32px 28px}
+.detail-meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+  border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.detail-field{padding:13px 16px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.detail-field:nth-child(3n){border-right:none}
+.detail-field:nth-last-child(-n+3){border-bottom:none}
+.detail-field-label{font-size:.57rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:5px;font-weight:400;transition:color .35s}
+.detail-field-value{font-size:.82rem;color:var(--text-dim);line-height:1.5;transition:color .35s}
+.detail-field-value.large{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--text)}
+.detail-field-value a{color:var(--gold);text-decoration:none;
+  border-bottom:1px solid rgba(59,113,243,.3);transition:border-color .2s;
+  word-break:break-all;font-size:.78rem}
+.detail-field-value a:hover{border-color:var(--gold)}
+.detail-section-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:9px;transition:color .35s}
+.detail-abstract-body{background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:16px 20px;font-size:.84rem;color:var(--text-dim);
+  line-height:1.8;transition:color .35s,background .35s}
+.detail-abstract-body p+p{margin-top:12px}
+.detail-abstract-body strong{color:var(--text);font-weight:500}
+
+/* ── SETTINGS ── */
+.settings-section{display:none}
+.settings-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:30px 34px;margin-bottom:18px;transition:var(--T)}
+.settings-card-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;
+  color:var(--text);margin-bottom:5px;transition:color .35s}
+.settings-card-desc{font-size:.78rem;color:var(--text-muted);margin-bottom:22px;transition:color .35s}
+.settings-card-footer{display:flex;justify-content:space-between;align-items:center}
+.settings-field-label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:7px;transition:color .35s}
+.settings-input{width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:.84rem;
+  font-weight:300;color:var(--text);outline:none;transition:border-color .2s,background .35s,color .35s;
+  margin-bottom:18px}
+.settings-input::placeholder{color:var(--text-muted)}
+.settings-input:focus{border-color:rgba(59,113,243,.5)}
+.btn-save{background:linear-gradient(135deg,var(--gold),#2563eb);border:none;color:#fff;
+  padding:9px 22px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:.78rem;
+  font-weight:500;letter-spacing:.06em;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 14px rgba(59,113,243,.2)}
+.btn-save:hover{box-shadow:0 6px 22px rgba(59,113,243,.35);transform:translateY(-1px)}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--text-dim);
+  padding:9px 22px;border-radius:7px;font-family:'DM Sans',sans-serif;
+  font-size:.78rem;letter-spacing:.04em;cursor:pointer;transition:all .2s}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.members-empty{font-size:.82rem;color:var(--text-muted);font-style:italic;transition:color .35s}
+
+/* ── SIGN IN MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.58);
+  backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;
+  justify-content:center;animation:fadeIn .2s ease}
+.modal-overlay.open{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  width:420px;padding:40px 38px 34px;position:relative;
+  box-shadow:0 32px 80px rgba(0,0,0,.5);animation:slideUp .25s cubic-bezier(.4,0,.2,1);
+  transition:background .35s,border-color .35s}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;
+  color:var(--text-muted);font-size:1.1rem;cursor:pointer;padding:4px 8px;
+  border-radius:6px;transition:color .2s,background .2s}
+.modal-close:hover{color:var(--text);background:var(--surface2)}
+.modal-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;
+  color:var(--text);letter-spacing:.03em;margin-bottom:3px;transition:color .35s}
+.modal-logo-sub{font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:26px}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;
+  color:var(--text);margin-bottom:5px;transition:color .35s}
+.modal-subtitle{font-size:.78rem;color:var(--text-muted);margin-bottom:26px;transition:color .35s}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:6px;transition:color .35s}
+.modal-input{width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:.84rem;
+  font-weight:300;color:var(--text);outline:none;transition:border-color .2s,background .35s,color .35s}
+.modal-input::placeholder{color:var(--text-muted)}
+.modal-input:focus{border-color:rgba(59,113,243,.52)}
+.modal-submit{width:100%;background:linear-gradient(135deg,var(--gold),#2563eb);border:none;
+  color:#fff;padding:11px;border-radius:8px;font-family:'DM Sans',sans-serif;
+  font-size:.84rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;margin-top:6px;box-shadow:0 4px 18px rgba(59,113,243,.22);transition:all .2s}
+.modal-submit:hover{box-shadow:0 6px 26px rgba(59,113,243,.38);transform:translateY(-1px)}
+.modal-divider{display:flex;align-items:center;gap:12px;margin:18px 0}
+.modal-divider-line{flex:1;height:1px;background:var(--border)}
+.modal-divider-text{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.modal-footer{text-align:center;margin-top:18px;font-size:.78rem;color:var(--text-muted);transition:color .35s}
+.modal-footer a{color:var(--gold);cursor:pointer;text-decoration:none;
+  border-bottom:1px solid rgba(59,113,243,.3);transition:border-color .2s}
+.modal-footer a:hover{border-color:var(--gold)}
+.modal-form{display:block}
+.modal-form.hidden{display:none}
+
+/* ── FOCUS & A11Y ── */
+.nav-item:focus-visible,.btn-ghost:focus-visible,.btn-gold:focus-visible,
+.search-bar:focus-within,.theme-toggle:focus-visible,.modal-close:focus-visible,
+.view-all:focus-visible,.view-details-btn:focus-visible,.btn-save:focus-visible,
+.btn-outline:focus-visible,.modal-submit:focus-visible,.detail-back-btn:focus-visible{
+  outline:2px solid var(--gold);outline-offset:2px}
+.theme-toggle:focus-visible .toggle-track{outline:2px solid var(--gold);outline-offset:2px}
+input:focus,select:focus,button:focus{outline:none}
+
+/* ── RESPONSIVE ── */
+@media (max-width:1200px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .abstracts-grid{grid-template-columns:repeat(2,1fr)}
+  .content{padding:40px 32px}
+  .topbar{padding:0 32px}
+}
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%);width:260px;box-shadow:8px 0 32px rgba(0,0,0,.25)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;max-width:100vw}
+  .topbar{padding:0 20px;height:64px;padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+  .topbar-search-wrap{display:none !important}
+  .topbar-actions{flex-wrap:nowrap;gap:6px;min-width:0;flex-shrink:0}
+  .topbar-actions .btn-ghost{background:var(--surface2);border:1px solid var(--border);color:var(--text);
+    padding:8px 14px;font-size:.75rem;font-weight:500;border-radius:8px;min-height:40px}
+  .topbar-actions .btn-gold{padding:8px 14px;font-size:.75rem;min-height:40px}
+  .content{padding:32px 20px;padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
+  .page-title{font-size:2.2rem}
+  .stats-grid{grid-template-columns:1fr;gap:1px}
+  .abstracts-grid{grid-template-columns:1fr}
+  .section-header{flex-wrap:wrap;gap:12px}
+  .detail-meta-grid{grid-template-columns:1fr}
+  .detail-field{border-right:none;border-bottom:1px solid var(--border)}
+  .detail-field:nth-last-child(-n+3){border-bottom:1px solid var(--border)}
+  .detail-field:last-child{border-bottom:none}
+  .sources-table thead th,.sources-table tbody td,.search-results-table thead th,
+  .search-results-table tbody td{padding:12px 16px;font-size:.8rem}
+  .modal{width:90vw;max-width:380px;padding:32px 24px 28px}
+}
+@media (max-width:600px){
+  .topbar-actions{gap:6px;flex-wrap:nowrap;min-width:0}
+  .topbar-search-wrap{display:none !important}
+  .page-header{flex-direction:column;align-items:flex-start;gap:16px}
+  .header-date{text-align:left}
+  .search-controls{flex-direction:column;align-items:stretch}
+  .search-input-wrap{width:100%;max-width:100%}
+  .search-results-table-wrap{max-width:100%}
+  .stat-value{font-size:2.5rem}
+  .content{min-width:0;padding:24px 16px;padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+  .topbar{padding:0 12px;padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+  .nav-item,.btn-ghost,.btn-gold,.menu-toggle{min-height:44px;min-width:44px}
+  .sources-section{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  .sources-table{min-width:280px}
+  .stats-grid,.abstracts-grid,.section-header{max-width:100%}
+}
+@media (max-width:480px){
+  .page-title{font-size:1.85rem}
+  .content{padding:20px 12px;padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+  .topbar{padding:0 10px;height:56px;padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}
+  .topbar-search-wrap{display:none !important}
+  .topbar-actions{gap:4px}
+  .topbar-actions .btn-ghost{padding:6px 10px;font-size:.7rem;white-space:nowrap;
+    background:var(--surface2);border:1px solid var(--border);color:var(--text);font-weight:500;min-height:38px}
+  .topbar-actions .btn-gold{padding:6px 10px;font-size:.7rem;min-height:38px}
+  .abstract-card{padding:16px}
+  .stat-card{padding:16px 14px}
+  .stat-value{font-size:2rem}
+  .card-title{font-size:.95rem}
+}
+@media (max-width:390px){
+  .topbar-actions .btn-ghost span{display:none}
+  .topbar-actions .btn-ghost .btn-icon{margin:0}
+  .topbar-actions .btn-ghost{padding:8px;min-width:40px;min-height:40px;justify-content:center}
+  .content{padding:16px 10px;padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}
+  .page-title{font-size:1.65rem}
+}
+
+.menu-toggle{display:none;background:none;border:1px solid var(--border);
+  color:var(--text);border-radius:8px;padding:8px 10px;cursor:pointer;
+  margin-right:12px;transition:border-color .2s,color .35s}
+.menu-toggle:hover{border-color:var(--gold);color:var(--gold)}
+@media (max-width:900px){.menu-toggle{display:flex;align-items:center;justify-content:center}}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);
+  backdrop-filter:blur(4px);z-index:9;transition:opacity .2s}
+.sidebar-overlay.open{display:block}
+@media (max-width:900px){.sidebar{z-index:10}}
+.sidebar-close{display:none;position:absolute;top:16px;right:14px;background:var(--surface2);
+  border:1px solid var(--border);color:var(--text-muted);border-radius:8px;
+  padding:6px;cursor:pointer;transition:color .2s,border-color .2s;z-index:2}
+.sidebar-close:hover{color:var(--gold);border-color:var(--gold)}
+@media (max-width:900px){.sidebar-close{display:flex;align-items:center;justify-content:center}
+.logo{padding-right:48px}}
+</style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <button class="sidebar-close" id="sidebarClose" type="button" aria-label="Close menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="logo">
+    <div class="logo-wordmark">Congress Design</div>
+    <div class="logo-sub">Research Intelligence</div>
+  </div>
+  <nav class="nav">
+    <a class="nav-item active" href="#" data-page="overview">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <rect x="1" y="1" width="6" height="6" rx="1.5"/>
+        <rect x="9" y="1" width="6" height="6" rx="1.5"/>
+        <rect x="1" y="9" width="6" height="6" rx="1.5"/>
+        <rect x="9" y="9" width="6" height="6" rx="1.5"/>
+      </svg>
+      Overview
+    </a>
+    <a class="nav-item" href="#" data-page="abstracts">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M2 3h12M2 8h12M2 13h7"/>
+      </svg>
+      Abstracts
+    </a>
+    <a class="nav-item" href="#" data-page="sources">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/>
+      </svg>
+      Sources
+    </a>
+    <a class="nav-item" href="#" data-page="search">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3"/>
+      </svg>
+      Search
+    </a>
+    <a class="nav-item" href="#">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <circle cx="8" cy="8" r="6.5"/><path d="M8 5v3M8 11h.01"/>
+      </svg>
+      Analytics
+    </a>
+    <a class="nav-item" href="#" data-page="settings" style="margin-top:20px">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M7 2H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V9"/>
+        <path d="M9 1h6v6M15 1l-7 7"/>
+      </svg>
+      Settings
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-label">Logged in as</div>
+    <div class="user-row">
+      <div class="user-avatar">G</div>
+      <div class="user-name">Guest User</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar">
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <div class="topbar-search-wrap">
+      <div class="search-bar">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="var(--text-muted)" stroke-width="1.5">
+          <circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3"/>
+        </svg>
+        <input type="text" placeholder="Search abstracts, sources…"/>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <div class="theme-toggle" id="themeToggle" title="Toggle theme">
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      </div>
+      <button class="btn-ghost btn-with-icon" id="signInBtn">
+        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Sign in</span>
+      </button>
+      <button class="btn-gold" id="topbarAddSourceBtn">+ Source</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ── OVERVIEW ── -->
+    <div id="page-overview">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Research <em>at a Glance</em></div>
+          <div class="gold-rule"></div>
+          <div class="page-subtitle" style="margin-top:10px">Congress abstracts · Unified intelligence</div>
+        </div>
+        <div class="header-date">
+          Thursday<strong>March 2026</strong>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Abstracts</div>
+          <div class="stat-value gold">2,221</div>
+          <div class="stat-delta"><span>↑ 4.2%</span> vs last quarter</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Sources</div>
+          <div class="stat-value">7</div>
+          <div class="stat-delta"><span>+2</span> added this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Unique from Data</div>
+          <div class="stat-value teal">1</div>
+          <div class="stat-delta" style="color:var(--text-muted)">Active dataset</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Therapeutic Areas</div>
+          <div class="stat-value violet">1</div>
+          <div class="stat-delta" style="color:var(--text-muted)">Covered today</div>
+        </div>
+      </div>
+      <div class="section-header">
+        <div class="section-title">Recent Abstracts</div>
+        <a class="view-all" href="#" id="viewAllAbstracts">View all →</a>
+      </div>
+      <div class="abstracts-grid">
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Campus Healthcare Crisis: An Analysis of Lack of Access and Availability Among College Populations</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Improving Educational Barriers for Unaccompanied Unhoused Youth through Collaboration</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Subjective vs Objective Measures of Sleep in Adolescents: A Multi-Year Longitudinal Study</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Comparing HIV Literacy in Adolescents and Young Adults</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Eating Disorders-Related Health Education in US Schools, 2008–2020</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Mental Health, Sleep Concern, and Quality of Life in Children with Hypermobile Ehlers-Danlos Syndrome</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+      </div>
+    </div>
+
+    <!-- ── ABSTRACTS ── -->
+    <div id="page-abstracts" style="display:none">
+      <div style="margin-bottom:40px">
+        <div class="page-title">Abstracts</div>
+        <div class="gold-rule"></div>
+        <div class="page-subtitle" style="margin-top:10px">Recent abstracts · All sources</div>
+      </div>
+      <div class="abstracts-grid">
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Campus Healthcare Crisis: An Analysis of Lack of Access and Availability Among College Populations</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Improving Educational Barriers for Unaccompanied Unhoused Youth through Collaboration</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Subjective vs Objective Measures of Sleep in Adolescents: A Multi-Year Longitudinal Study</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Comparing HIV Literacy in Adolescents and Young Adults</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Eating Disorders-Related Health Education in US Schools, 2008–2020</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+        <div class="abstract-card"><div class="card-badge">AAP</div><div class="card-title">Mental Health, Sleep Concern, and Quality of Life in Children with Hypermobile Ehlers-Danlos Syndrome</div><div class="card-meta"><div class="card-source">American Academy of Pediatrics 2024</div><div class="card-date">2024-09-27 — 2024-10-01</div></div><div class="card-arrow">→</div></div>
+      </div>
+    </div>
+
+    <!-- ── SOURCES ── -->
+    <div class="sources-section" id="page-sources">
+      <div class="sources-header">
+        <div>
+          <div class="page-title">Sources</div>
+          <div class="gold-rule"></div>
+          <div class="page-subtitle" style="margin-top:10px">7 active sources</div>
+        </div>
+        <div class="sources-header-actions">
+          <div class="search-input-wrap" style="width:220px">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <input id="sourcesSearchInput" type="text" placeholder="Search…"/>
+          </div>
+          <button class="btn-gold" id="addSourceBtn">+ Add Source</button>
+        </div>
+      </div>
+      <table class="sources-table">
+        <thead><tr><th>Source Name</th><th>Meeting Name</th><th></th></tr></thead>
+        <tbody id="sourcesTableBody">
+          <tr><td><span class="source-badge">AAP</span></td><td>American Academy of Pediatrics</td><td style="text-align:right;color:var(--gold)">→</td></tr>
+          <tr><td><span class="source-badge">ASCO</span></td><td>American Society of Clinical Oncology</td><td style="text-align:right;color:var(--gold)">→</td></tr>
+          <tr><td><span class="source-badge">EHA</span></td><td>European Hematology Association</td><td style="text-align:right;color:var(--gold)">→</td></tr>
+          <tr><td><span class="source-badge">ESMO</span></td><td>European Society for Medical Oncology</td><td style="text-align:right;color:var(--gold)">→</td></tr>
+          <tr><td><span class="source-badge">ACC</span></td><td>American College of Cardiology</td><td style="text-align:right;color:var(--gold)">→</td></tr>
+          <tr><td><span class="source-badge">AHA</span></td><td>American Heart Association</td><td style="text-align:right;color:var(--gold)">→</td></tr>
+          <tr><td><span class="source-badge">ASH</span></td><td>American Society of Hematology</td><td style="text-align:right;color:var(--gold)">→</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── SEARCH ── -->
+    <div class="search-page-section" id="page-search">
+      <div style="margin-bottom:32px">
+        <div class="page-title">Search</div>
+        <div class="gold-rule"></div>
+        <div class="page-subtitle" style="margin-top:10px">Filter congress data by date and source</div>
+      </div>
+      <div class="search-controls">
+        <div class="search-control-group">
+          <div class="search-control-label">Search data</div>
+          <div class="search-input-wrap">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <input id="searchDataInput" type="text" placeholder="Search by source, meeting, keywords…"/>
+          </div>
+        </div>
+        <div class="search-control-group">
+          <div class="search-control-label">Date</div>
+          <select id="searchDateSelect" class="search-select"><option value="">All years</option><option value="2026">2026</option><option value="2025">2025</option><option value="2024">2024</option></select>
+        </div>
+        <div class="search-control-group">
+          <div class="search-control-label">Src</div>
+          <select id="searchSrcSelect" class="search-select"><option value="">All sources</option><option value="AAP">AAP</option><option value="ASCO">ASCO</option><option value="EHA">EHA</option><option value="ESMO">ESMO</option><option value="ACC">ACC</option><option value="AHA">AHA</option></select>
+        </div>
+      </div>
+      <div class="search-results-table-wrap">
+        <table class="search-results-table">
+          <thead><tr><th>Creation Date</th><th>Source</th><th>Medicine</th><th>Meeting</th><th>Meeting Date</th><th>Keywords</th><th>View Details</th></tr></thead>
+          <tbody id="searchResultsBody">
+          <tr data-source="AAP" data-year="2024"><td>Feb 16, 2026</td><td><span class="source-badge">AAP</span></td><td class="dash">—</td><td class="meeting-cell">American Academy of Pediatric (AAP) 2024</td><td>2024-09-27 – 2024-10-01</td><td class="dash">—</td><td><button class="view-details-btn">View details →</button></td></tr>
+          <tr data-source="AAP" data-year="2024"><td>Feb 16, 2026</td><td><span class="source-badge">AAP</span></td><td class="dash">—</td><td class="meeting-cell">American Academy of Pediatric (AAP) 2024</td><td>2024-09-27 – 2024-10-01</td><td class="dash">—</td><td><button class="view-details-btn">View details →</button></td></tr>
+          <tr data-source="AAP" data-year="2024"><td>Feb 16, 2026</td><td><span class="source-badge">AAP</span></td><td class="dash">—</td><td class="meeting-cell">American Academy of Pediatric (AAP) 2024</td><td>2024-09-27 – 2024-10-01</td><td class="dash">—</td><td><button class="view-details-btn">View details →</button></td></tr>
+          <tr data-source="ASCO" data-year="2025"><td>Mar 10, 2026</td><td><span class="source-badge">ASCO</span></td><td class="dash">—</td><td class="meeting-cell">ASCO Annual Meeting 2025</td><td>2025-05-30 – 2025-06-03</td><td class="dash">—</td><td><button class="view-details-btn">View details →</button></td></tr>
+          <tr data-source="ASCO" data-year="2025"><td>Mar 10, 2026</td><td><span class="source-badge">ASCO</span></td><td class="dash">—</td><td class="meeting-cell">ASCO Annual Meeting 2025</td><td>2025-05-30 – 2025-06-03</td><td class="dash">—</td><td><button class="view-details-btn">View details →</button></td></tr>
+          <tr data-source="EHA" data-year="2024"><td>Jan 22, 2026</td><td><span class="source-badge">EHA</span></td><td class="dash">—</td><td class="meeting-cell">EHA Congress 2024</td><td>2024-06-13 – 2024-06-16</td><td class="dash">—</td><td><button class="view-details-btn">View details →</button></td></tr>
+          <tr data-source="EHA" data-year="2024"><td>Jan 22, 2026</td><td><span class="source-badge">EHA</span></td><td class="dash">—</td><td class="meeting-cell">EHA Congress 2024</td><td>2024-06-13 – 2024-06-16</td><td class="dash">—</td><td><button class="view-details-btn">View details →</button></td></tr>
+          <tr data-source="AAP" data-year="2024"><td>Feb 16, 2026</td><td><span class="source-badge">AAP</span></td><td class="dash">—</td><td class="meeting-cell">American Academy of Pediatric (AAP) 2024</td><td>2024-09-27 – 2024-10-01</td><td class="dash">—</td><td><button class="view-details-btn">View details →</button></td></tr>
+          <tr data-source="AAP" data-year="2024"><td>Feb 16, 2026</td><td><span class="source-badge">AAP</span></td><td class="dash">—</td><td class="meeting-cell">American Academy of Pediatric (AAP) 2024</td><td>2024-09-27 – 2024-10-01</td><td class="dash">—</td><td><button class="view-details-btn">View details →</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── ABSTRACT DETAIL ── -->
+    <div class="abstract-detail-section" id="page-abstract-detail">
+      <button class="detail-back-btn" id="detailBackBtn">← Back to Search</button>
+      <div class="detail-card">
+        <div class="detail-title-bar">
+          <div class="detail-title">Campus Healthcare Crisis: An Analysis of Lack of Access and Availability Among College Populations</div>
+        </div>
+        <div class="detail-body">
+          <div class="detail-meta-grid">
+            <div class="detail-field"><div class="detail-field-label">Source</div><div class="detail-field-value"><span class="source-badge">AAP</span></div></div>
+            <div class="detail-field"><div class="detail-field-label">Medicine</div><div class="detail-field-value" style="color:var(--text-muted)">—</div></div>
+            <div class="detail-field"><div class="detail-field-label">Keywords</div><div class="detail-field-value" style="color:var(--text-muted)">—</div></div>
+            <div class="detail-field"><div class="detail-field-label">Meeting Name</div><div class="detail-field-value large">American Academy of Pediatric (AAP) 2024</div></div>
+            <div class="detail-field"><div class="detail-field-label">Meeting Date</div><div class="detail-field-value">2024-09-27 – 2024-10-01</div></div>
+            <div class="detail-field"><div class="detail-field-label">Publication Date</div><div class="detail-field-value">September 28, 2024</div></div>
+          </div>
+          <div style="margin-bottom:14px"><div class="detail-section-label">Authors</div><div class="detail-field-value">Rachel Kim, Saia Kalash, Julian Franco Jr, Ruth Milanaik</div></div>
+          <div style="margin-bottom:14px"><div class="detail-section-label">XML URL</div><div class="detail-field-value"><a href="https://aapexperience24.eventscribe.net/ajaxcalls/PosterInfo.asp?PosterID=681449" target="_blank">https://aapexperience24.eventscribe.net/ajaxcalls/PosterInfo.asp?PosterID=681449</a></div></div>
+          <div><div class="detail-section-label">Abstract Body</div>
+            <div class="detail-abstract-body">
+              <p><strong>Background:</strong> College is a challenging transitional stage as youth must independently manage their health. Most colleges require proof of health insurance before matriculation and offer affiliated insurances. Therefore, with many students shifting physicians secondary to aging out, insurance change, and geographical positions, they must now rely on campus health facilities (CHF). This study examines the availability and accessibility of CHFs to determine whether they provide the care needed by these young adults.</p>
+              <p><strong>Methods:</strong> The top 3 most enrolled colleges in each of the 50 US states were identified by CollegeFactual and College Raptor. The following data were collected from each college and CHF website: 1) student population (SP); 2) number of clinical staff (CS) (MD/DO, NP, and PA); 3) CHF hours, # days open/week, weekend availability; 4) reviews on appointment availability (on Google or Reddit); 5) insurance information; and 6) services available. Analysis was done in R at an α = .05.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS ── -->
+    <div class="settings-section" id="page-settings">
+      <div style="margin-bottom:36px">
+        <div class="page-title">Settings</div>
+        <div class="gold-rule"></div>
+        <div class="page-subtitle" style="margin-top:10px">Edit your email and password</div>
+      </div>
+      <div class="settings-card">
+        <div class="settings-card-title">Email</div>
+        <div class="settings-card-desc">Update the email address associated with your account.</div>
+        <div class="settings-field-label">Email address</div>
+        <input class="settings-input" type="email" placeholder="Enter your email"/>
+        <div><button class="btn-save">Save changes</button></div>
+      </div>
+      <div class="settings-card">
+        <div class="settings-card-title">Password &amp; Security</div>
+        <div class="settings-card-desc">Keep your account secure by using a strong, unique password.</div>
+        <div><button class="btn-outline">Change password</button></div>
+      </div>
+      <div class="settings-card">
+        <div class="settings-card-footer">
+          <div>
+            <div class="settings-card-title">Team members</div>
+            <div class="settings-card-desc" style="margin-bottom:0">Invite team members to collaborate.</div>
+          </div>
+          <button class="btn-save">+ Add Member</button>
+        </div>
+        <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border)">
+          <div class="members-empty">No team members yet. Invite someone to get started.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- SIGN IN / SIGN UP MODAL -->
+<div class="modal-overlay" id="signInModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-logo">Congress Design</div>
+    <div class="modal-logo-sub">Research Intelligence</div>
+
+    <div class="modal-form" id="modalSignIn">
+      <div class="modal-title">Welcome back</div>
+      <div class="modal-subtitle">Sign in to your account to continue</div>
+      <div class="modal-field"><label>Email address</label><input class="modal-input" type="email" placeholder="you@example.com" autocomplete="email"/></div>
+      <div class="modal-field"><label>Password</label><input class="modal-input" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
+      <button class="modal-submit">Sign in</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SOURCE MODAL -->
+<div class="modal-overlay" id="addSourceModal">
+  <div class="modal">
+    <button class="modal-close" id="addSourceModalClose">✕</button>
+    <div class="modal-title" style="margin-bottom:8px">Add source</div>
+    <div class="modal-subtitle" style="margin-bottom:22px">Add a new congress source to your list.</div>
+    <div class="modal-field"><label>Source name</label><input class="modal-input" id="addSourceName" type="text" placeholder="e.g. AAP, ASCO, EHA" maxlength="20"/></div>
+    <div class="modal-field"><label>Meeting name</label><input class="modal-input" id="addMeetingName" type="text" placeholder="e.g. American Academy of Pediatrics 2024"/></div>
+    <button class="modal-submit" id="addSourceSubmit">Add source</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded',fn); }
+  ready(function(){
+  try {
+  var html = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  function applyTheme(t){ html.setAttribute('data-theme',t); localStorage.setItem('cd-theme',t); }
+  const saved = localStorage.getItem('cd-theme');
+  if(saved) applyTheme(saved);
+  if(themeToggle) themeToggle.addEventListener('click',function(){ applyTheme(html.getAttribute('data-theme')==='dark'?'light':'dark'); });
+
+  // ── Navigation ──
+  const navItems = document.querySelectorAll('.nav-item[data-page]');
+  const pages = {
+    overview:          document.getElementById('page-overview'),
+    abstracts:         document.getElementById('page-abstracts'),
+    sources:           document.getElementById('page-sources'),
+    search:            document.getElementById('page-search'),
+    settings:          document.getElementById('page-settings'),
+    'abstract-detail': document.getElementById('page-abstract-detail'),
+  };
+
+  function showPage(key){
+    Object.entries(pages).forEach(([k,el])=>{
+      if(!el) return;
+      el.style.display = k===key ? 'block' : 'none';
+      el.classList.toggle('page-visible', k===key);
+      el.setAttribute('data-visible', k===key ? 'true' : 'false');
+    });
+    window.scrollTo(0,0);
+  }
+  var pageOverview = document.getElementById('page-overview');
+  if(pageOverview){ pageOverview.classList.add('page-visible'); pageOverview.setAttribute('data-visible','true'); }
+
+  navItems.forEach(function(item){
+    item.addEventListener('click',function(e){
+      e.preventDefault();
+      var pageKey = item.getAttribute('data-page');
+      if(!pageKey) return;
+      navItems.forEach(function(n){ n.classList.remove('active'); });
+      item.classList.add('active');
+      showPage(pageKey);
+    });
+  });
+
+  // View details → detail page
+  document.querySelectorAll('.view-details-btn').forEach(function(btn){
+    btn.addEventListener('click',function(e){ e.stopPropagation(); showPage('abstract-detail'); });
+  });
+
+  // Back from detail
+  var detailBackBtn = document.getElementById('detailBackBtn');
+  if(detailBackBtn) detailBackBtn.addEventListener('click',()=>showPage('search'));
+
+  // View all → abstracts
+  var viewAllAbstracts = document.getElementById('viewAllAbstracts');
+  if(viewAllAbstracts) viewAllAbstracts.addEventListener('click',e=>{
+    e.preventDefault();
+    navItems.forEach(n=>n.classList.remove('active'));
+    var abstractsNav = document.querySelector('[data-page="abstracts"]');
+    if(abstractsNav) abstractsNav.classList.add('active');
+    showPage('abstracts');
+  });
+
+  // ── Search page: filter table by search text, date, and source ──
+  const searchDataInput = document.getElementById('searchDataInput');
+  const searchDateSelect = document.getElementById('searchDateSelect');
+  const searchSrcSelect = document.getElementById('searchSrcSelect');
+  const searchResultsBody = document.getElementById('searchResultsBody');
+  function filterSearchTable(){
+    if(!searchResultsBody) return;
+    var query = (searchDataInput && searchDataInput.value ? searchDataInput.value : '').trim().toLowerCase();
+    var year = (searchDateSelect && searchDateSelect.value ? searchDateSelect.value : '').trim();
+    var source = (searchSrcSelect && searchSrcSelect.value ? searchSrcSelect.value : '').trim();
+    var rows = searchResultsBody.querySelectorAll('tr');
+    rows.forEach(tr=>{
+      const rowSource = (tr.getAttribute('data-source') || '').toLowerCase();
+      const rowYear = (tr.getAttribute('data-year') || '');
+      const rowText = (tr.textContent || '').toLowerCase();
+      const matchQuery = !query || rowText.includes(query);
+      const matchYear = !year || rowYear === year;
+      const matchSource = !source || rowSource === source.toLowerCase();
+      tr.style.display = (matchQuery && matchYear && matchSource) ? '' : 'none';
+    });
+  }
+  if(searchDataInput){ searchDataInput.addEventListener('input',filterSearchTable); searchDataInput.addEventListener('keyup',filterSearchTable); }
+  if(searchDateSelect) searchDateSelect.addEventListener('change',filterSearchTable);
+  if(searchSrcSelect) searchSrcSelect.addEventListener('change',filterSearchTable);
+
+  // ── Sign in modal ──
+  const signInModal = document.getElementById('signInModal');
+  var signInBtn = document.getElementById('signInBtn');
+  var modalClose = document.getElementById('modalClose');
+  if(signInBtn && signInModal) signInBtn.addEventListener('click',()=>signInModal.classList.add('open'));
+  if(modalClose && signInModal) modalClose.addEventListener('click',()=>signInModal.classList.remove('open'));
+  if(signInModal) signInModal.addEventListener('click',e=>{ if(e.target===signInModal) signInModal.classList.remove('open') });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && signInModal) signInModal.classList.remove('open') });
+
+  // ── Add source modal ──
+  const addSourceModal = document.getElementById('addSourceModal');
+  const addSourceBtn = document.getElementById('addSourceBtn');
+  const addSourceModalClose = document.getElementById('addSourceModalClose');
+  const addSourceName = document.getElementById('addSourceName');
+  const addMeetingName = document.getElementById('addMeetingName');
+  const addSourceSubmit = document.getElementById('addSourceSubmit');
+  const sourcesTableBody = document.getElementById('sourcesTableBody');
+  function openAddSourceModal(){ if(addSourceName) addSourceName.value=''; if(addMeetingName) addMeetingName.value=''; if(addSourceModal){ addSourceModal.classList.add('open'); if(addSourceName) addSourceName.focus(); } }
+  if(addSourceBtn) addSourceBtn.addEventListener('click',openAddSourceModal);
+  var topbarAddSourceBtn = document.getElementById('topbarAddSourceBtn');
+  if(topbarAddSourceBtn) topbarAddSourceBtn.addEventListener('click',function(){
+    navItems.forEach(function(n){ n.classList.remove('active'); });
+    var sourcesNav = document.querySelector('[data-page="sources"]');
+    if(sourcesNav) sourcesNav.classList.add('active');
+    showPage('sources');
+    openAddSourceModal();
+  });
+  var sourcesSearchInput = document.getElementById('sourcesSearchInput');
+  if(sourcesSearchInput && sourcesTableBody) sourcesSearchInput.addEventListener('input',function(){
+    var q = (this.value || '').trim().toLowerCase();
+    var rows = sourcesTableBody.querySelectorAll('tr');
+    rows.forEach(function(tr){
+      var text = (tr.textContent || '').toLowerCase();
+      tr.style.display = !q || text.indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+  if(addSourceModalClose && addSourceModal) addSourceModalClose.addEventListener('click',()=>addSourceModal.classList.remove('open'));
+  if(addSourceModal) addSourceModal.addEventListener('click',e=>{ if(e.target===addSourceModal) addSourceModal.classList.remove('open') });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && addSourceModal) addSourceModal.classList.remove('open') });
+  if(addSourceSubmit && addSourceName && addMeetingName && sourcesTableBody && addSourceModal) addSourceSubmit.addEventListener('click',function(){
+    var name = (addSourceName.value || '').trim().toUpperCase();
+    var meeting = (addMeetingName.value || '').trim();
+    if(!name || !meeting){ addSourceName.focus(); return; }
+    var tr = document.createElement('tr');
+    var badge = document.createElement('span');
+    badge.className = 'source-badge';
+    badge.textContent = name;
+    var td1 = document.createElement('td');
+    td1.appendChild(badge);
+    var td2 = document.createElement('td');
+    td2.textContent = meeting;
+    var td3 = document.createElement('td');
+    td3.style.textAlign = 'right';
+    td3.style.color = 'var(--gold)';
+    td3.textContent = '→';
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    sourcesTableBody.appendChild(tr);
+    addSourceModal.classList.remove('open');
+  });
+
+  // ── Mobile sidebar ──
+  var sidebar = document.getElementById('sidebar');
+  var sidebarOverlay = document.getElementById('sidebarOverlay');
+  var menuToggle = document.getElementById('menuToggle');
+  var sidebarCloseBtn = document.getElementById('sidebarClose');
+  function closeSidebar(){ if(sidebar){ sidebar.classList.remove('open'); } if(sidebarOverlay){ sidebarOverlay.classList.remove('open'); sidebarOverlay.setAttribute('aria-hidden','true'); } }
+  function openSidebar(){ if(sidebar){ sidebar.classList.add('open'); } if(sidebarOverlay){ sidebarOverlay.classList.add('open'); sidebarOverlay.setAttribute('aria-hidden','false'); } }
+  if(menuToggle) menuToggle.addEventListener('click',function(){ if(sidebar && sidebar.classList.contains('open')) closeSidebar(); else openSidebar(); });
+  if(sidebarOverlay) sidebarOverlay.addEventListener('click',closeSidebar);
+  if(sidebarCloseBtn) sidebarCloseBtn.addEventListener('click',closeSidebar);
+  navItems.forEach(function(item){ item.addEventListener('click',closeSidebar); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeSidebar(); });
+  } catch(err) { console.error('Congress Design init error:', err); }
+  }); // end ready
+})();
+</script>
+</body>
+</html>

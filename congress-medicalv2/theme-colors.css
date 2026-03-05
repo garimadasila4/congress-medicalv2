@@ -1,0 +1,47 @@
+/**
+ * Congress Design — Theme colors (onelabel.net palette)
+ * Light and dark theme CSS variables. Link this file before main styles.
+ */
+
+:root,
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface2: #334155;
+  --surface3: #475569;
+  --text: #f1f5f9;
+  --text-dim: rgba(241, 245, 249, 0.7);
+  --text-muted: rgba(241, 245, 249, 0.38);
+  --border: rgba(59, 113, 243, 0.25);
+  --topbar-bg: rgba(15, 23, 42, 0.88);
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  --ambient1: rgba(59, 113, 243, 0.08);
+  --ambient2: rgba(99, 102, 241, 0.06);
+  --gold: #3B71F3;
+  --gold-light: #60a5fa;
+  --gold-pale: rgba(59, 113, 243, 0.15);
+  --teal: #0ea5e9;
+  --violet: #6366f1;
+  --sidebar-w: 240px;
+  --T: background 0.35s, color 0.35s, border-color 0.35s, box-shadow 0.35s;
+}
+
+[data-theme="light"] {
+  --bg: #F7FAFC;
+  --surface: #ffffff;
+  --surface2: #E0E7FF;
+  --surface3: #E5E7EB;
+  --text: #1B2E5C;
+  --text-dim: #4B5563;
+  --text-muted: #6B7280;
+  --border: rgba(59, 113, 243, 0.2);
+  --topbar-bg: rgba(247, 250, 252, 0.92);
+  --shadow: 0 8px 32px rgba(27, 46, 92, 0.08);
+  --ambient1: rgba(59, 113, 243, 0.1);
+  --ambient2: rgba(224, 231, 255, 0.5);
+  --gold: #3B71F3;
+  --gold-light: #2563eb;
+  --gold-pale: rgba(59, 113, 243, 0.12);
+  --teal: #0d9488;
+  --violet: #4f46e5;
+}
